@@ -1,0 +1,12 @@
+version: '3.3'
+
+services:
+  bowling.api:
+    image: bowling.api
+    build:
+      context: .
+      dockerfile: Bowling/Dockerfile
+    environment: 
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080:80"

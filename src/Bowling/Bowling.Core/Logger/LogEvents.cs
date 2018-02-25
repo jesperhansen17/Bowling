@@ -9,6 +9,7 @@ namespace Bowling.Core.Logger
         public const int SubmitScore = 10;
 
         public const int NoFramesPost = 50;
+        public const int ToManyFramesPost = 51;
 
         public const int InvalidFrameScore = 90;
     }

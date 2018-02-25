@@ -35,6 +35,11 @@ namespace Bowling.Controllers
                 _logger.LogWarning(LogEvents.NoFramesPost, "Bad Request: No frames posted");
                 return BadRequest();
             }
+            if (ScoreRequest.Frames.Count() > 10)
+            {
+                _logger.LogWarning(LogEvents.ToManyFramesPost, "Bad Request: To many frames posted");
+                return BadRequest();
+            }
 
             for (var i = 0; i < ScoreRequest.Frames.Count; i++)
             {
