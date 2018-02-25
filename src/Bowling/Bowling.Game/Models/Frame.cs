@@ -1,13 +1,11 @@
 ﻿using Bowling.Game.Exceptions;
 using Bowling.Game.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Bowling.Game.Models
 {
     public class Frame : IFrame
     {
+        protected const int STRIKE_SPARE_POINTS = 10;
         public IFrame PreviousFrame { get; set; }
         public int FirstScore { get; set; }
         public int SecondScore { get; set; }
@@ -16,11 +14,11 @@ namespace Bowling.Game.Models
         {
             get
             {
-                if (FirstScore == 10)
+                if (FirstScore == STRIKE_SPARE_POINTS)
                 {
                     return FrameMark.Strike;
                 }
-                else if (FirstScore + SecondScore == 10)
+                else if (FirstScore + SecondScore == STRIKE_SPARE_POINTS)
                 {
                     return FrameMark.Spare;
                 }
@@ -38,7 +36,7 @@ namespace Bowling.Game.Models
         /// <returns>The total score of the frame</returns>
         public virtual int CalculateScore()
         {            
-            if (FirstScore + SecondScore > 10)
+            if (FirstScore + SecondScore > STRIKE_SPARE_POINTS)
             {
                 throw new InvalidScoreException("The sum of first and second score is greater than 10");
             }
@@ -47,18 +45,25 @@ namespace Bowling.Game.Models
             {
                 if (PreviousFrame.FrameMark == FrameMark.Open)
                 {
-                    return PreviousFrame.TotalScore + CalculateOpenFrame();
+                    return TotalScore = PreviousFrame.TotalScore + CalculateOpenFrame();
                 }
                 else
                 {
                     var previousFrameScore = CalculatePreviousFrame();
                     var currentFrameScore = CalculateOpenFrame();
-                    return previousFrameScore + currentFrameScore;
+                    return TotalScore = previousFrameScore + currentFrameScore;
                 }
             }
             else
             {
-                return CalculateOpenFrame();
+                if (FrameMark == FrameMark.Open)
+                {
+                    return TotalScore = CalculateOpenFrame();
+                }
+                else
+                {
+                    return TotalScore = 0;
+                }
             }
         }
 
@@ -72,27 +77,39 @@ namespace Bowling.Game.Models
         }
 
         /// <summary>
-        /// Calculates the total score for an spare frame.
+        /// Calculates the total score for the previous spare frame.
         /// </summary>
-        /// <param name="frame">The frame to calculate.</param>
+        /// <param name="spareFrame">The frame to calculate.</param>
         /// <returns>The total score for an spare frame</returns>
-        public int CalculateSpare(IFrame frame)
+        public int CalculatePreviousSpare(IFrame spareFrame)
         {
-            // Update previous frames score
-            frame.TotalScore = frame.PreviousFrame.TotalScore + 10 + FirstScore;
-            return frame.TotalScore;
+            if (spareFrame.PreviousFrame != null)
+            {
+                spareFrame.TotalScore = spareFrame.PreviousFrame.TotalScore + STRIKE_SPARE_POINTS + FirstScore;
+            }
+            else
+            {
+                spareFrame.TotalScore = STRIKE_SPARE_POINTS + FirstScore;
+            }         
+            return spareFrame.TotalScore;
         }
 
         /// <summary>
-        /// Calculates the total score for an strike frame.
+        /// Calculates the total score for the previous strike frame.
         /// </summary>
-        /// <param name="frame">The frame to calculate.</param>
+        /// <param name="strikeFrame">The frame to calculate.</param>
         /// <returns>The total score for an strike frame</returns>
-        public int CalculateStrike(IFrame frame)
+        public int CalculatePreviousStrike(IFrame strikeFrame)
         {
-            // Update previous frames score
-            frame.TotalScore = frame.PreviousFrame.TotalScore + 10 + FirstScore + SecondScore;
-            return frame.TotalScore;
+            if (strikeFrame.PreviousFrame != null)
+            {
+                strikeFrame.TotalScore = strikeFrame.PreviousFrame.TotalScore + STRIKE_SPARE_POINTS + FirstScore + SecondScore;
+            }
+            else
+            {
+                strikeFrame.TotalScore = STRIKE_SPARE_POINTS + FirstScore + SecondScore;
+            }
+            return strikeFrame.TotalScore;
         }
 
         protected int CalculatePreviousFrame()
@@ -100,9 +117,9 @@ namespace Bowling.Game.Models
             switch (PreviousFrame.FrameMark)
             {
                 case FrameMark.Spare:
-                    return CalculateSpare(PreviousFrame);
+                    return CalculatePreviousSpare(PreviousFrame);
                 case FrameMark.Strike:
-                    return CalculateStrike(PreviousFrame);
+                    return CalculatePreviousStrike(PreviousFrame);
                 default:
                     return 0;
             }
@@ -129,18 +146,18 @@ namespace Bowling.Game.Models
             {
                 if (PreviousFrame.FrameMark == FrameMark.Open)
                 {
-                    return PreviousFrame.TotalScore + CalculateOpenFrame();
+                    return TotalScore = PreviousFrame.TotalScore + CalculateOpenFrame();
                 }
                 else
                 {
                     var previousFrameScore = CalculatePreviousFrame();
                     var currentFrameScore = CalculateOpenFrame();
-                    return previousFrameScore + currentFrameScore;
+                    return TotalScore = previousFrameScore + currentFrameScore;
                 }
             }
             else
             {
-                return CalculateOpenFrame();
+                return TotalScore = CalculateOpenFrame();
             }
         }
 
@@ -150,6 +167,11 @@ namespace Bowling.Game.Models
         /// <returns>Total score for the last frame of the game.</returns>
         public override int CalculateOpenFrame()
         {
+            if (FrameMark == FrameMark.Open && ThirdScore != 0)
+            {
+                throw new InvalidScoreException("Frame mark is open and thirdscore is not 0");
+            }
+
             return FirstScore + SecondScore + ThirdScore;
         }
     }

@@ -14,7 +14,7 @@ namespace Bowling.Game.Interfaces
         FrameMark FrameMark { get; }
         int CalculateScore();
         int CalculateOpenFrame();
-        int CalculateSpare(IFrame frame);
-        int CalculateStrike(IFrame frame);
+        int CalculatePreviousSpare(IFrame frame);
+        int CalculatePreviousStrike(IFrame frame);
     }
 }

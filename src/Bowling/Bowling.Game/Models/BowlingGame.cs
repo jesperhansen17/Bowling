@@ -1,4 +1,5 @@
-﻿using Bowling.Game.Interfaces;
+﻿using Bowling.Core.Exceptions;
+using Bowling.Game.Interfaces;
 using Bowling.Game.Models;
 using System;
 using System.Collections.Generic;
@@ -36,9 +37,9 @@ namespace Bowling.Game
         {
             var frameWithHighestScore = Frames.OrderByDescending(frame => frame.TotalScore).FirstOrDefault();
             
-            if (frameWithHighestScore == null)
+            if (frameWithHighestScore.TotalScore == 0 && Frames.Sum(x => x.FirstScore + x.SecondScore) != 0)
             {
-                throw new Exception();
+                throw new ScoreNotCalculatedException();
             }
 
             return frameWithHighestScore.TotalScore;
