@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bowling.Api", "Bowling\Bowling.Api.csproj", "{0BF698C8-B9CC-4EC9-BC6D-09D54CD35C7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bowling.Api", "Bowling\Bowling.Api.csproj", "{0BF698C8-B9CC-4EC9-BC6D-09D54CD35C7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bowling.Game", "Bowling.Game\Bowling.Game.csproj", "{8FD51391-A672-4691-83D7-1B435FC917FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bowling.Game", "Bowling.Game\Bowling.Game.csproj", "{8FD51391-A672-4691-83D7-1B435FC917FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bowling.Core", "Bowling.Core\Bowling.Core.csproj", "{1827B211-4AAE-4FE5-A10B-8AA8BBDC4DFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{8FD51391-A672-4691-83D7-1B435FC917FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FD51391-A672-4691-83D7-1B435FC917FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FD51391-A672-4691-83D7-1B435FC917FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1827B211-4AAE-4FE5-A10B-8AA8BBDC4DFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1827B211-4AAE-4FE5-A10B-8AA8BBDC4DFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1827B211-4AAE-4FE5-A10B-8AA8BBDC4DFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1827B211-4AAE-4FE5-A10B-8AA8BBDC4DFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

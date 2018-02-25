@@ -1,4 +1,5 @@
-﻿using Bowling.Game.Interfaces;
+﻿using Bowling.Game.Exceptions;
+using Bowling.Game.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,8 +31,18 @@ namespace Bowling.Game.Models
             }
         }
 
+        /// <summary>
+        /// Calculates the frame score by adding last frames total score with this frames total score.
+        /// If previous frame where a spare/strike and this frame is an open frame it updates previous frame using this frames score.
+        /// </summary>
+        /// <returns>The total score of the frame</returns>
         public virtual int CalculateScore()
-        {
+        {            
+            if (FirstScore + SecondScore > 10)
+            {
+                throw new InvalidScoreException("The sum of first and second score is greater than 10");
+            }
+
             if (PreviousFrame != null)
             {
                 if (PreviousFrame.FrameMark == FrameMark.Open)
@@ -51,11 +62,20 @@ namespace Bowling.Game.Models
             }
         }
 
+        /// <summary>
+        /// Calculates the total score of an open frame
+        /// </summary>
+        /// <returns>Total score for an open frame</returns>
         public virtual int CalculateOpenFrame()
         {
             return FirstScore + SecondScore;
         }
 
+        /// <summary>
+        /// Calculates the total score for an spare frame.
+        /// </summary>
+        /// <param name="frame">The frame to calculate.</param>
+        /// <returns>The total score for an spare frame</returns>
         public int CalculateSpare(IFrame frame)
         {
             // Update previous frames score
@@ -63,6 +83,11 @@ namespace Bowling.Game.Models
             return frame.TotalScore;
         }
 
+        /// <summary>
+        /// Calculates the total score for an strike frame.
+        /// </summary>
+        /// <param name="frame">The frame to calculate.</param>
+        /// <returns>The total score for an strike frame</returns>
         public int CalculateStrike(IFrame frame)
         {
             // Update previous frames score
@@ -88,8 +113,18 @@ namespace Bowling.Game.Models
     {
         public int ThirdScore { get; set; }
 
+        /// <summary>
+        /// Calculates the frame score by adding last frames total score with this frames total score.
+        /// If previous frame where a spare/strike and this frame is an open frame it updates previous frame using this frames score.
+        /// </summary>
+        /// <returns>The total score of the frame</returns>
         public override int CalculateScore()
         {
+            if (FirstScore + SecondScore + ThirdScore > 30)
+            {
+                throw new InvalidScoreException("The sum of first, second and third score in the last frame is greater than 30");
+            }
+
             if (PreviousFrame != null)
             {
                 if (PreviousFrame.FrameMark == FrameMark.Open)
@@ -109,6 +144,10 @@ namespace Bowling.Game.Models
             }
         }
 
+        /// <summary>
+        /// Calculates the total score for the last frame of the game.
+        /// </summary>
+        /// <returns>Total score for the last frame of the game.</returns>
         public override int CalculateOpenFrame()
         {
             return FirstScore + SecondScore + ThirdScore;

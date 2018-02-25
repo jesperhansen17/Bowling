@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Bowling.Core.Filter;
 using Bowling.Game;
 using Bowling.Game.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -22,7 +23,10 @@ namespace Bowling
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().AddControllersAsServices();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(HttpExceptionFilter));
+            }).AddControllersAsServices();
 
             // Swagger API Docs
             services.AddSwaggerGen(options =>

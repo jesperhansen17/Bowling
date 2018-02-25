@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bowling.Core\Bowling.Core.csproj" />
     <ProjectReference Include="..\Bowling.Game\Bowling.Game.csproj" />
   </ItemGroup>
 

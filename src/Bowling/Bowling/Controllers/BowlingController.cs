@@ -3,20 +3,24 @@ using System.Linq;
 using System.Net;
 using Bowling.Api.DTO.Respond;
 using Bowling.Api.ViewModels;
+using Bowling.Core.Logger;
 using Bowling.Game.Exceptions;
 using Bowling.Game.Interfaces;
 using Bowling.Game.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Bowling.Controllers
 {
     public class BowlingController : Controller
     {
         private readonly IGame _bowlingGame;
+        private readonly ILogger _logger;
 
-        public BowlingController(IGame bowlingGame)
+        public BowlingController(IGame bowlingGame, ILogger<BowlingController> logger)
         {
             _bowlingGame = bowlingGame;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -25,8 +29,10 @@ namespace Bowling.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult CalculateScore([FromBody]FramesDTO ScoreRequest)
         {
+            _logger.LogInformation(LogEvents.SubmitScore, "Calculating score");
             if (ScoreRequest.Frames.Count() < 1)
             {
+                _logger.LogWarning(LogEvents.NoFramesPost, "Bad Request: No frames posted");
                 return BadRequest();
             }
 
@@ -52,15 +58,7 @@ namespace Bowling.Controllers
             }
 
             // Calculate Score
-            try
-            {
-                _bowlingGame.CalculateGameScore();
-            }
-            catch (InvalidScoreException ex)
-            {
-                return BadRequest();
-            }
-
+            _bowlingGame.CalculateGameScore();
             var totalScore = _bowlingGame.GetTotalScore();
             var frames = _bowlingGame.Frames;
 
